@@ -26,35 +26,8 @@ const Welcome =({navigation, route})=>{
     const [userLogin,setUserLogin] = useState();
     const [userEmail,setUserEmail] = useState();
 
-    const load = async() =>{
-        try {
-           let us =  await AsyncStorage.getItem("Name")          
-           if(us !== null){       
-                setUserLogin(JSON.parse(us));           
-                setUserEmail(userLogin.UserInfor.Name);
-                // console.log(userLogin);
-           }
-        } catch (error) {
-            setUserEmail("");
-            console.log("Get user Storage");
-        }
-    }
-
-    useEffect(() => {
-        load();
-    },[userEmail])
-
-    // const remove = async() =>{
-    //     try {
-    //         await AsyncStorage.removeItem("Name")  
-    //         console.log("Remove user Storage");        
-    //     } catch (error) {
-    //         console.log("Remove user Storage Failed");
-    //     }
-    // }
     return (
         <>
-            {/* <StatusBar style="dark"/> */}
             <View style={style.backgroundImageContainer}>
                 <ImageBackground style={style.backgroundImage}
                         source={require('./../assets/images/welcome.jpg')}
@@ -82,7 +55,6 @@ const Welcome =({navigation, route})=>{
                         </StyledButton>           
                         <StyledButton onPress={
                                 () => {
-                                    // remove();
                                     navigation.navigate('Login')
                                 }
                             }>

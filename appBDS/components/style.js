@@ -22,6 +22,8 @@ export const Colors = {
 
 const {primary, secondary, tertiary, darkLight, brand, green, red, blue,dark,light, grey, transparent,white} = Colors;
 
+
+// nền background
 export const StyledContainer = styled.View`
     flex:1;
     padding:25px;
@@ -29,8 +31,11 @@ export const StyledContainer = styled.View`
     background-color: ${primary};
 `;
 
+// css thực thể của page
+// flex:1;= flex:1 1 0n;(trong đó n là một đơn vị chiều dài).Nếu tất cả các mục trong thùng chứa flex sử dụng mẫu này,
+// kích thước của chúng sẽ tỷ lệ thuận với hệ số uốn được chỉ định
 export const InnerContainer = styled.View`
-    flex:1;
+    flex:1;  
     width: 100%;
     align-items: center;
 `;
@@ -89,11 +94,12 @@ export const SubTitle = styled.Text`
     `}
 `;
 
+// chứa các field text input, btn
 export const StyledFormArea = styled.View`
     width:90%;
-
 `;
 
+// 
 export const StyledTextInput = styled.TextInput`
     background-color:${tertiary};
     padding:15px;

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 
 import {Formik} from 'formik';
 import { StatusBar } from 'expo-status-bar';
-
+import {URL} from './../global';
 //icons
 import {Octicons , Ionicons, Fontisto} from '@expo/vector-icons';
 
@@ -47,7 +47,7 @@ const Signup =({navigation})=>{
     const handleSignup = (credentials,setSubmitting) =>{
         handleMessage(null);
         console.log(credentials);
-        const url = 'https://apinodejsbds.herokuapp.com/api/auth/register';
+        const url = URL+'auth/register';
         console.log(url);
         axios
             .post(url,credentials)
@@ -58,18 +58,18 @@ const Signup =({navigation})=>{
                     handleMessage(message,success);
                 }
                 else{
-                       handleMessage("Tạo tài khoản thành công !!!");         
+                       handleMessage("Tạo tài khoản thành công !!!",true);         
                 }
                 setSubmitting(false);
             })
             .catch(error =>{
             console.log(error);
             setSubmitting(false);
-             handleMessage("An error occurred. Check your network and try again");
+             handleMessage("An error occurred. Check your network and try again",false);
         });
     };
 
-    const handleMessage =(message,type = false) =>{
+    const handleMessage =(message,type) =>{
         setMessage(message);
         setMessageType(type);
     }
@@ -79,7 +79,6 @@ const Signup =({navigation})=>{
     return (
         <KeyboardAvoidingWrapper>
             <StyledContainer>
-            <StatusBar style="dark"/>
                 <InnerContainer>
                     <PageTitle>8xland</PageTitle>
                     {/* <SubTitle>Signup</SubTitle> */}
@@ -89,15 +88,15 @@ const Signup =({navigation})=>{
                             const validator = require('validator');
                             if(values.Email==''||values.Password==''||values.Name==''||values.Phone==''||values.Address=='')
                             {
-                                handleMessage("Please fill all the fields");
+                                handleMessage("Please fill all the fields",false);
                                 setSubmitting(false);
                             }
                             else if(validator.isEmail(values.Email)==false){
-                                handleMessage("Valid email address !!!");
+                                handleMessage("Valid email address !!!",false);
                                 setSubmitting(false);
                             }
                             else if(values.Phone.length!=10){
-                                handleMessage("Phone number have 10 characters !!!");
+                                handleMessage("Phone number have 10 characters !!!",false);
                                 setSubmitting(false);
                             }                          
                             else{

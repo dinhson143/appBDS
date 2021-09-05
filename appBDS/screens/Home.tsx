@@ -10,11 +10,39 @@ import axios from 'axios';
 const {width} = Dimensions.get('screen'); 
 const Home = ({navigation,route})=>{
     const user = route.params;
-    const ListOptions = () =>{
-        // const optionsList = [
-        //     {title: 'Lịch hẹn của bạn',img: require('./../assets/images/lichhen.jpg')},
-        //     {title: 'BDS yêu thích',img: require('./../assets/images/favorite.png')},
-        // ];
+
+     const [selectedCategoryIndex,setselectedCategoryIndex]= React.useState(
+        0,
+    );
+    // 
+
+    // call api BDS
+    const [bds, setdataBDS] = React.useState( [] );
+    // call api Category
+    const [categoryList, setdataCate] = React.useState( [] );
+    //get user information
+    const [userLogin,setUserLogin] = useState();
+    const [userEmail,setUserEmail] = useState("");
+
+    useEffect(() => {
+        const getDataBDS = async () =>{
+            const response = await axios(URL + "bds");
+            setdataBDS(response.data);
+            //  console.log(response.data)
+        }
+         getDataBDS();
+
+         const getDataCate = async () =>{
+            const response = await axios(URL + "loaiBDS");
+            setdataCate(response.data);
+            //  console.log(response.data)
+        }
+         getDataCate();
+    },[])
+
+
+    ////////////////
+     const ListOptions = () =>{
         return (           
                 <View style={style.optionListContainer}>
                     <Pressable onPress={()=>navigation.navigate("Schedule",user)}>
@@ -33,53 +61,7 @@ const Home = ({navigation,route})=>{
         )
     }
 
-     const [selectedCategoryIndex,setselectedCategoryIndex]= React.useState(
-        0,
-    );
-    // 
 
-    // call api BDS
-    const [bds, setdataBDS] = React.useState( [] );
-    // call api Category
-    const [categoryList, setdataCate] = React.useState( [] );
-    // get user storages 
-    //get user information
-    const [userLogin,setUserLogin] = useState();
-    const [userEmail,setUserEmail] = useState("");
-
-    const load = async() =>{
-        try {
-           let us =  await AsyncStorage.getItem("Name")          
-           if(us !== null){       
-                setUserLogin(JSON.parse(us));           
-                setUserEmail(userLogin.UserInfor.Name);
-                // console.log(userEmail);
-           }
-        } catch (error) {
-            setUserEmail("8xland");
-            console.log("Get user Storage");
-        }
-    }
-    useEffect(() => {
-        const getDataBDS = async () =>{
-            const response = await axios(URL + "bds");
-            setdataBDS(response.data);
-            //  console.log(response.data)
-        }
-         getDataBDS();
-
-         const getDataCate = async () =>{
-            const response = await axios(URL + "loaiBDS");
-            setdataCate(response.data);
-            //  console.log(response.data)
-        }
-         getDataCate();
-        load();
-    },[userEmail])
-
-
-    ////////////////
-    
     const Category = ({category, index}) =>{
         return ( 
              <Pressable onPress={()=>{
@@ -100,7 +82,10 @@ const Home = ({navigation,route})=>{
             </Pressable>
         )      
     }
-    // console.log(categoryList);
+
+
+
+    // card BDS
     const Card = ({bds}) =>{
         return (
             <Pressable onPress={()=>{                  
@@ -141,12 +126,7 @@ const Home = ({navigation,route})=>{
         <SafeAreaView
             style={{backgroundColor:white, flex:1}}          
         >
-
-           {/* <StatusBar 
-                translucent={false} 
-                backgroundColor={white}
-                barStyle="dark-content"
-            /> */}
+            {/* back */}
             <View style={style.backgroundImageContainer}>
                 <View style={style.header}>               
                     <View style={style.headerBtn}>
@@ -156,6 +136,8 @@ const Home = ({navigation,route})=>{
                     </View>
                 </View>
             </View>
+
+            {/* goto edit user */}
             <View style={style.header}>
                 <View>
                     <Text style={{color:grey}}>Xin chào</Text>
@@ -174,6 +156,8 @@ const Home = ({navigation,route})=>{
                     </View>
                 </Pressable>
             </View>
+
+
             <ScrollView>
                     <View style={{
                         flexDirection:"row",
@@ -188,12 +172,13 @@ const Home = ({navigation,route})=>{
                             <Icon name="tune" color={white} size={25}/>
                         </View>
                     </View>
+
                     <ListOptions/>
+
                     <Pressable onPress={()=>{
                         const getDataBDStheoLoai = async () =>{
                             const response = await axios(URL + "bds");
                             setdataBDS(response.data);
-                            // console.log(response.data)
                         }
                         getDataBDStheoLoai();
                         }}>
@@ -201,6 +186,8 @@ const Home = ({navigation,route})=>{
                             Trang chủ
                         </Text>                   
                     </Pressable>
+
+                    {/* category */}
                     <View style={style.categoryListContainer}>  
                         <FlatList
                         showsHorizontalScrollIndicator={false}
@@ -211,6 +198,7 @@ const Home = ({navigation,route})=>{
                         />
                     </View>
                     
+                    {/* BDS */}
                     <FlatList
                         snapInterval={width-20}
                         contentContainerStyle={{paddingLeft:20, paddingVertical:20}}

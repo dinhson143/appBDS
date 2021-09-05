@@ -76,11 +76,15 @@ const DetailBDS = ({navigation, route})=>{
                         source={{uri:bds.Image[0]}}
                     >
                         <View style={style.header}>
+
+                            {/* back */}
                             <View style={style.headerBtn}>
                                 <Icon name="arrow-back-ios" color={white} size={20}
                                     onPress={navigation.goBack}
                                 />
                             </View>
+
+                            {/* thêm vào list favorite */}
                             <Pressable onPress={()=>{
                                 const kiemtra = newArr2.map((item)=>{
                                     return (item.IDbds==bds._id ? item : {});
@@ -150,6 +154,8 @@ const DetailBDS = ({navigation, route})=>{
                                     />
                                 </View>
                             </Pressable>
+
+
                         </View>
                         
                     </ImageBackground>

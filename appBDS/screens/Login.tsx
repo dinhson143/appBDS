@@ -32,7 +32,7 @@ import {
 const {blue,brand, darkLight, primary} = Colors;
 
 import {View , ActivityIndicator,AsyncStorage} from 'react-native';
-import {URL} from './../global'
+import {URL} from './../global';
 //KeyboardAvoidingView
 import KeyboardAvoidingWrapper from './../components/KeyboardAvoidingWrapper';
 
@@ -45,40 +45,10 @@ const Login =({navigation})=>{
     const [messageType,setMessageType] = useState();
     const [userLogin,setUserLogin] = useState();
     
-    const save = async() =>{
-        try {
-            await AsyncStorage.setItem("Name",JSON.stringify(userLogin))
-        } catch (error) {
-            alert("Error");
-        }
-    }
-
-    const load = async() =>{
-        try {
-           let us =  await AsyncStorage.getItem("Name")          
-           if(us !== null){       
-               setUserLogin(JSON.parse(us));
-            //    console.log(userLogin.Email);
-           }
-        } catch (error) {
-            alert("Error");
-        }
-    }
-    // const remove = async() =>{
-    //     try {
-    //         await AsyncStorage.removeItem("Name")  
-    //         console.log("Remove user Storage Login");        
-    //     } catch (error) {
-    //         console.log("Remove user Storage Failed");
-    //     }
-    // }
-
-    useEffect(() => {
-        load();
-    },[])
 
     const handleLogin = (credentials,setSubmitting) =>{
         handleMessage(null);
+        // login
         const url = URL+'auth/login';
          console.log(credentials);
         axios
@@ -90,6 +60,7 @@ const Login =({navigation})=>{
                     handleMessage(message,success);
                 }
                 else{
+                    // get user
                     const url = URL + 'user/'+credentials.Email;
                     axios
                         .get(url,
@@ -100,10 +71,9 @@ const Login =({navigation})=>{
                             }
                         )
                         .then((response) =>{
-                            // remove();
                             const result = response.data;
                             setUserLogin(result[0]);
-                            save();
+                            // save();
                             navigation.navigate('Welcome',{...result[0]});
                         })
                         .catch(error =>{
@@ -129,7 +99,6 @@ const Login =({navigation})=>{
     return (
         <KeyboardAvoidingWrapper>
             <StyledContainer>
-            <StatusBar style="dark"/>
                 <InnerContainer>
                     <PageLogo resizeMode="cover" source={require('./../assets/images/logo.png')}/>
                     <PageTitle>8xland</PageTitle>
@@ -147,7 +116,8 @@ const Login =({navigation})=>{
                             }
                         }}
                     >
-                        {({handleChange, handleBlur, handleSubmit, values, isSubmitting}) => (<StyledFormArea>
+                        {({handleChange, handleBlur, handleSubmit, values, isSubmitting}) => (
+                        <StyledFormArea>
                             <MyTextInput
                                 label="Email Address"
                                 icon="mail"
@@ -166,17 +136,20 @@ const Login =({navigation})=>{
                                 onChangeText={handleChange('Password')}
                                 onBlur={handleBlur('Password')}
                                 value={values.Password}
+                                // ***
                                 secureTextEntry ={hidePassword}
                                 isPassword={true}
+                                //  icon eye ẩn password
                                 hidePassword={hidePassword}
+                                // click
                                 setHidePassword = {setHidePassword}
                             />
                             <MsgBox type={messageType}>{message}</MsgBox>
-
+                            
                             {!isSubmitting && (<StyledButton onPress={handleSubmit}>
                                 <ButtonText>Login</ButtonText>
                             </StyledButton>)}
-
+                            
                             {isSubmitting && (<StyledButton disabled={true}>
                                 <ActivityIndicator size="large" color="primary" />
                             </StyledButton>)}
@@ -194,6 +167,7 @@ const Login =({navigation})=>{
                                     <TextLinkContent>Sign up</TextLinkContent>
                                 </TextLink>
                             </ExtraView>
+
                         </StyledFormArea>) }
                     </Formik>
                 </InnerContainer>
@@ -209,7 +183,10 @@ const MyTextInput =({label, icon,isPassword, hidePassword,setHidePassword, ...pr
             <Octicons name={icon} size={30} color={blue}/>
         </LeftIcon>
         <StyledInputLabel>{label}</StyledInputLabel>
+
+        {/* fields còn lai */}
         <StyledTextInput {...props}/>
+        
         {isPassword && (
             <RightIcon onPress={()=> setHidePassword(!hidePassword)}>
                 <Ionicons name={hidePassword ? 'md-eye-off' : 'md-eye'} size={30} color={darkLight}/>

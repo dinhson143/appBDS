@@ -73,12 +73,22 @@ const Datlich =({navigation,route})=>{
         }
         return false;
     }
+
+    function kiemtraNgay(day){
+        for (let i = 0; i < newArr.length; i++) {
+            const dateCmp =new Date(newArr[i].Date);
+            if((dateCmp.getDay()==day.getDay()) && (dateCmp.getMonth()==day.getMonth()) && (dateCmp.getFullYear()==day.getFullYear())){
+                return true;
+            }
+        }
+        return false;
+    }
     // load Lich
     useEffect(() => {
         const getDataLich = async () =>{
             const response = await axios(URL + "Lich");
             setdataLich(response.data);
-            //  console.log(response.data)
+            // console.log("Update");
         }
          getDataLich();
          if(lich.length ==0){
@@ -91,8 +101,6 @@ const Datlich =({navigation,route})=>{
                 newArr.push(lich[i]);
             }
     }
-    // console.log(newArr);
-
 
 
     const onChange  = (event, selectedDate) =>{
@@ -106,15 +114,24 @@ const Datlich =({navigation,route})=>{
     }
     const handleSignup = (credentials,setSubmitting) =>{
         handleMessage(null);
-        console.log(newArr);
+        // console.log(newArr);
         const kiemtra = newArr.map((item)=>{
             return (item.IDbds==bds._id ? item : {});
         })
-        console.log(kiemtra);
+
+        // console.log(credentials);
+
         if(kiemtraLich(kiemtra)==true){
             setSubmitting(false);
             setMessageType(false);
              handleMessage("Đã có lịch cho bất động sản này");
+             return;
+        }
+        if(kiemtraNgay(dob)==true){
+            setSubmitting(false);
+            setMessageType(false);
+             handleMessage("Bạn đã có lịch hẹn vào ngày đã chọn");
+             return;
         }
         else{
             credentials["Date"] = dob;
@@ -129,9 +146,9 @@ const Datlich =({navigation,route})=>{
                         handleMessage(message,success);
                     }
                     else{
+                        setLoad("update");  
                         handleMessage("Đặt lịch thành công !!!"); 
                         setMessageType(true);   
-                        setLoad("");  
                     }
                     setSubmitting(false);
                 })
@@ -167,16 +184,7 @@ const Datlich =({navigation,route})=>{
                 <InnerContainer>
                     <PageTitle>8xland</PageTitle>
                     {/* <SubTitle>Signup</SubTitle> */}
-                    {show && (
-                        <DateTimePicker
-                        testID="dateTimePicker"
-                        value={date}
-                        mode='date'
-                        is24Hour={true}
-                        display="default"
-                        onChange={onChange}
-                        />
-                    )}
+                   
                     <Formik 
                         initialValues ={{IDuser:user._id,IDbds:bds._id,Name:user.UserInfor.Name,Message:'',Email:user.Email,Sdt:user.UserInfor.Phone, Xacnhan:false}}
                         onSubmit={(values, {setSubmitting})=>{
@@ -247,6 +255,16 @@ const Datlich =({navigation,route})=>{
                             />
                         
                         
+                            {show && (
+                                <DateTimePicker
+                                testID="dateTimePicker"
+                                value={date}
+                                mode='date'
+                                is24Hour={true}
+                                display="default"
+                                onChange={onChange}
+                                />
+                            )}
                             <MyTextInput
                                 label="Date schedule"
                                 icon="calendar"
@@ -284,9 +302,11 @@ const MyTextInput =({label, icon,isPassword, hidePassword,setHidePassword,isDate
             <Octicons name={icon} size={30} color={blue}/>
         </LeftIcon>
         <StyledInputLabel>{label}</StyledInputLabel>
+
         {!isDate && <StyledTextInput {...props}/>}
         {isDate && <TouchableOpacity onPress={showDatePicker}>
-            <StyledTextInput {...props}/>
+        
+        <StyledTextInput {...props}/>
         </TouchableOpacity>}
         {isPassword && (
             <RightIcon onPress={()=> setHidePassword(!hidePassword)}>

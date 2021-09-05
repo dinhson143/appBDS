@@ -196,11 +196,22 @@ const Signup =({navigation,route})=>{
                                 <ActivityIndicator size="large" color="primary" />
                             </StyledButton>)} 
 
+
+                            <StyledButton onPress={()=>{
+                                navigation.navigate("Home",user)
+                            }}>
+                                <ButtonText>Trở về</ButtonText>
+                            </StyledButton> 
+
+
+
                             <StyledButton onPress={()=>{
                                 navigation.navigate("Welcome",user)
                             }}>
                                 <ButtonText>Logout</ButtonText>
-                            </StyledButton>                     
+                            </StyledButton>  
+
+                                              
 
                             <Line/>                     
                         </StyledFormArea>) }
