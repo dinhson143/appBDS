@@ -166,8 +166,7 @@ const Datlich =({navigation,route})=>{
         setMessageType(type);
     }
 
-
-    // console.log(dob);
+  
     return (
         <KeyboardAvoidingWrapper>
             <StyledContainer>

@@ -96,6 +96,16 @@ const Schedule =({navigation,route})=>{
             </View>
         )
     }
+
+    newArr.sort(function(a,b){
+        const day1 = new Date(a.Date);
+        const day2 = new Date(b.Date);
+        // console.log(typeof(day1));
+        // console.log(day1);
+        return new Date(day2) - new Date(day1);
+    });
+    // console.log(newArr);
+
      if (lich.length>0 && bds.length>0) {
          return(
             <>
